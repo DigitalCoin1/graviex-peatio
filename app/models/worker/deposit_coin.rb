@@ -10,8 +10,8 @@ module Worker
       txid = payload[:txid]
 
       channel = DepositChannel.find_by_key(channel_key)
-      if channel.currency_obj.proto == 'ETH'
-        raw  = get_raw_eth channel, txid
+      if channel.currency_obj.code == 'eth'
+        raw  = get_raw_eth txid
         raw.symbolize_keys!
         deposit_eth!(channel, txid, 1, raw)
       else
@@ -30,7 +30,7 @@ module Worker
           return
         end
         return if PaymentTransaction::Normal.where(txid: txid, txout: txout).first
-        confirmations = CoinRPC[channel.currency_obj.code].eth_blockNumber.to_i(16) - raw[:blockNumber].to_i(16)
+        confirmations = CoinRPC["eth"].eth_blockNumber.to_i(16) - raw[:blockNumber].to_i(16)
         tx = PaymentTransaction::Normal.create! \
         txid: txid,
         txout: txout,
@@ -64,7 +64,7 @@ module Worker
       return if detail[:category] != "receive"
 
       ActiveRecord::Base.transaction do
-        if channel.key == "gravio" && ListingRequest.where(address: detail[:address]).first
+        if channel.key == "spero" && ListingRequest.where(address: detail[:address]).first
           return if PaymentTransaction::Normal.where(txid: txid, txout: txout).first
 
           tx = PaymentTransaction::Normal.create! \
@@ -74,8 +74,7 @@ module Worker
           amount: detail[:amount].to_s.to_d,
           confirmations: raw[:confirmations],
           receive_at: Time.at(raw[:time]).to_datetime,
-          currency: channel.currency,
-          aasm_state: "confirmed"
+          currency: channel.currency
           request = ListingRequest.where(address: detail[:address]).first
           if request.amount
             request.amount = request.amount + detail[:amount].to_f
@@ -124,13 +123,8 @@ module Worker
       channel.currency_obj.api.gettransaction(txid)
     end
 
-    def get_raw_eth(channel, txid)
-      raw = CoinRPC[channel.currency_obj.code].eth_getTransactionByHash(txid)
-      if raw == nil
-        raw = CoinRPC[channel.currency_obj.code].eth_getTransaction(txid)
-      end
-      return raw
+    def get_raw_eth(txid)
+      CoinRPC["eth"].eth_getTransactionByHash(txid)
     end
   end
 end
-

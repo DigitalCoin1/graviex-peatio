@@ -374,7 +374,7 @@ CLOSE_IDX = 9
             threshold = 0.000000010
             if maxDeviation <= threshold
               maxDeviation = threshold
-              
+
               if dataMin - maxDeviation / 2.0 < 0.000000000
                 dataMin = 0.000000000 
               else
@@ -383,13 +383,13 @@ CLOSE_IDX = 9
 
             step = maxDeviation / ticks
             tickArray = []
- 
-            #console.log "diff=#{maxDeviation}, step=#{step}, minRange=#{this.minRange}"
+
+             #console.log "diff=#{maxDeviation}, step=#{step}, minRange=#{this.minRange}"
 
             prevTick = 0.000000000
             currentTick = dataMin
             for i in [0..ticks]
-              if currentTick - prevTick >= 0.0000000005
+               if currentTick - prevTick >= 0.0000000005
                 #console.log "tick(#{i})=#{currentTick}"
                 tickArray.push(currentTick)
                 prevTick = currentTick
@@ -634,5 +634,4 @@ CLOSE_IDX = 9
     @on document, 'switch::main_indicator_switch', @switchMainIndicator
     @on document, 'switch::indicator_switch', @switchMACDIndicator
     @on document, 'switch::type_switch', @switchType
-
 

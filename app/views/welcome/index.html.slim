@@ -1,21 +1,55 @@
 header.text-center
   .container
-    a href='http://gravio.net'
-      img src='#{image_path 'logo.png'}' width='336px'
-    section
-      - Rails.configuration.i18n.available_locales.each do |locale|
-        h3 = t(:slogan)
-        h3 = t(:promo)
-        h3 = t(:tip)
-    #getstart.row
-      - unless current_user
-        .col-xs-6.col-xs-offset-9.text-center
-          a href="#{market_path(current_market)}" class="btn btn-primary btn-lg btn-block" role="button" = t("header.getstart")
-          a href="#{signin_path}" class="btn btn-success btn-lg btn-block" style="background-color: #999999; border-color: #999999" onMouseOver="this.style.backgroundColor='#737373'" onMouseOut="this.style.backgroundColor='#999999'" role="button" = t("header.signin")
-          - if ENV['SIGNUP_ALLOWED'] == "true" 
-            a href="#{signup_path}" class="btn btn-warning btn-lg btn-block" role="button" = t("header.signup")
-      - else
-        .col-xs-6.col-xs-offset-9.text-center
-          a href="#{market_path(current_market)}" class="btn btn-primary btn-lg btn-block" role="button" = t("header.getstart")
-          a href="#{funds_path}" class="btn btn-primary btn-lg btn-block" role="button" = t("header.funds")
-          a href="#{settings_path}" class="btn btn-primary btn-lg btn-block" role="button" = t("header.settings")
+    .jumbotron style="background-image:url('imgs/logo.png');height:300px"
+     #getstart.row style="margin:250px 0 0 30px"
+          - unless current_user
+            .col-xs-6.col-xs-offset-9.text-center
+              a href="#{market_path(current_market)}" class="btn btn-primary btn-lg btn-block" role="button" = t("header.getstart")
+              a href="#{signin_path}" class="btn btn-success btn-lg btn-block" style="background-color: #999999; border-color: #999999" onMouseOver="this.style.backgroundColor='#737373'" onMouseOut="this.style.backgroundColor='#999999'" role="button" = t("header.signin")
+              - if ENV['SIGNUP_ALLOWED'] == "true"
+                a href="#{signup_path}" class="btn btn-warning btn-lg btn-block" role="button" = t("header.signup")
+          - else
+            .btn-group
+              a href="#{market_path(current_market)}" class="btn btn-default" role="button" = t("header.getstart")
+              a href="#{funds_path}" class="btn btn-default" role="button" = t("header.funds")
+              a href="#{settings_path}" class="btn btn-default" role="button" = t("header.settings")
+    br
+    br
+    br
+    center
+        h2 style="font-weight:bolder" = t("slogan")
+        a href="#" style="margin:5px"
+         img src="imgs/spero.png"
+        a href="#" style="margin:5px"
+         img src="imgs/btc.png"
+        a href="#" style="margin:5px"
+         img src="imgs/eth.png"
+        a href="#" style="margin:5px"
+         img src="imgs/ltc.png"
+        a href="#" style="margin:5px"
+         img src="imgs/doge.png"
+    br
+    center
+    h2 style="font-weight:bolder" = "Confira mais sobre a SperoCoin"
+    br
+    .col-xs-offset-8.col-xs-4
+        a href="https://sperocoin.org" target="_blank" class="btn btn-primary btn-block" role="button" = "SperoCoin"
+    .col-xs-4
+        a href="https://sperocoin.org/listing.php" target="_blank" class="btn btn-primary btn-block" role="button" = "Listar Moeda"
+    br
+    br
+    center
+        h2 style="font-weight:bolder" = "Exchange desenvolvida com os softwares:"
+        img src="imgs/peatio3.png"
+    br
+    br
+    center
+        h5 style="font-weight:bolder" = "Negociar é muito arriscado. Consulte um consultor financeiro. Não acredite em tudo que você lê. A SPERO EXCHANGE não é responsável por quaisquer decisões de negociação e não faz nenhum endosso."
+    br
+        h5 style="font-weight:bolder" = "Trading is very risky. Consult a financial advisor. Do not believe everything you read. SPERO EXCHANGER is not responsible for any trading decisions and makes no endorsements."
+    br
+    center
+        .tradingview-widget-container
+           .tradingview-widget-container__widget
+           .tradingview-widget-copyright
+<br>

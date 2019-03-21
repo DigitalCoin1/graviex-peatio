@@ -14,7 +14,7 @@ app.controller 'WithdrawsController', ['$scope', '$stateParams', '$http', '$gon'
   $scope.balance = $scope.account.balance
   $scope.withdraw_channel = WithdrawChannel.findBy('currency', $scope.currency)
 
-  $scope.selected_fund_source_id = (newId) ->
+  $scope.selected_fund_source = (newId) ->
     if angular.isDefined(newId)
       _selectedFundSourceId = newId
     else
@@ -24,7 +24,7 @@ app.controller 'WithdrawsController', ['$scope', '$stateParams', '$http', '$gon'
     fund_sources = fundSourceService.filterBy currency:currency
     # reset selected fundSource after add new one or remove previous one
     if not _selectedFundSourceId or not _selectedFundSourceIdInList(fund_sources)
-      $scope.selected_fund_source_id fund_sources[0].id if fund_sources.length
+      $scope.selected_fund_source fund_sources[0].id if fund_sources.length
     fund_sources
 
   # set defaultFundSource as selected
@@ -41,7 +41,7 @@ app.controller 'WithdrawsController', ['$scope', '$stateParams', '$http', '$gon'
   $scope.$watch ->
     fundSourceService.defaultFundSource currency:currency
   , (defaultFundSource) ->
-    $scope.selected_fund_source_id defaultFundSource.id if defaultFundSource
+    $scope.selected_fund_source defaultFundSource.id if defaultFundSource
 
   @withdraw = {}
   @createWithdraw = (currency) ->
@@ -76,14 +76,12 @@ app.controller 'WithdrawsController', ['$scope', '$stateParams', '$http', '$gon'
     @withdraw.sum = Number($scope.account.balance)
 
   $scope.openFundSourceManagerPanel = ->
-    # TODO:
-    # we do not have fiat ccy, so we do not need banks dialog
-    #if $scope.currency == $gon.fiat_currency
-    #  template = '/templates/fund_sources/bank.html'
-    #  className = 'ngdialog-theme-default custom-width'
-    #else
-    template = '/templates/fund_sources/coin.html'
-    className = 'ngdialog-theme-default custom-width coin'
+    if $scope.currency == $gon.fiat_currency
+      template = '/templates/fund_sources/bank.html'
+      className = 'ngdialog-theme-default custom-width'
+    else
+      template = '/templates/fund_sources/coin.html'
+      className = 'ngdialog-theme-default custom-width coin'
 
     ngDialog.open
       template:template

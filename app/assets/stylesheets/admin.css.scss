@@ -7,6 +7,7 @@
 
 //= require bootstrap-wysihtml5
 //= require bootstrap-wysihtml5
+
 @import 'vars/basic';
 @import 'vars/custom';
 
@@ -20,6 +21,8 @@
 
 .dl-horizontal dd {
   margin-left: 140px;
+  width: 25em;
+  word-wrap: break-word;
   width: 25em;
   word-wrap: break-word;
 }
@@ -93,7 +96,6 @@ span.detail-section {
 .pending {
   background: #e8e983;
 }
-
 
 [data-title] {
   &:before {

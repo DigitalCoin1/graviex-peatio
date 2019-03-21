@@ -228,10 +228,6 @@ class Withdraw < ActiveRecord::Base
       set_fee
     end
 
-    if channel.fee
-      self.fee = channel.fee
-    end
-
     self.sum ||= 0.0
     self.fee ||= 0.0
     self.amount = sum - fee

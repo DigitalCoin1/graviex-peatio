@@ -97,13 +97,13 @@
     currency = gon.market[type].currency
     balance = gon.accounts[currency]?.balance || 0
 
-#    console.log "refreshBalance: ", type, balance, event, data
+#    console.log "refreshBalance: ", type, balance, event, dat
 
     @select('currentBalanceSel').data('balance', balance)
     @select('currentBalanceSel').text(formatter.fix(type, balance))
 
     @trigger "place_order::balance::change", balance: BigNumber(balance)
-    @trigger "place_order::max::#{@usedInput}", max: BigNumber(balance)
+    @trigger 'place_order::balance::change', balance: BigNumber(balance)
     @trigger "place_order::balance::change::#{type}", balance: BigNumber(balance)
 
   @roundValueToText = (v, precision) ->
@@ -137,18 +137,17 @@
     else
       fee = gon.market.bid.fee
 
-    gio_discount_flag = -1
+    spero_discount_flag = -1
 
-    if gon.accounts != undefined
-      gio_account = gon.accounts['gio']
-      if gio_account.hasOwnProperty('gio_discount')
-        if gio_account.gio_discount == true
-          gio_discount_flag = 1
-        if gio_account.gio_discount == false
-          gio_discount_flag = 0
+    spero_account = gon.accounts['spero']
+    if spero_account.hasOwnProperty('spero_discount')
+      if spero_account.spero_discount == true
+        spero_discount_flag = 1
+      if spero_account.spero_discount == false
+        spero_discount_flag = 0
 
     fee_actual_percent = fee
-    if gio_discount_flag == 1
+    if spero_discount_flag == 1
       fee_actual_percent = fee / 2.0
 
     if order.hasOwnProperty('total')
@@ -158,7 +157,7 @@
 
     order.fee_percent = fee * 100.0
     order.fee_actual_percent = fee_actual_percent * 100.0
-    order.gio_discount_flag = gio_discount_flag
+    order.spero_discount_flag = spero_discount_flag
 
     if @select('priceSel').val() != 0.0 && @select('priceSel').val() != ''
       @select('feeLabelSel').hide().text(formatter.fixPriceGroup(order.fee)).fadeIn()
@@ -167,7 +166,7 @@
       @select('feeLabelSel').fadeOut().text('')
       @select('feeLabelInfo').fadeOut().text('')
 
-    if order.gio_discount_flag == 1
+    if order.spero_discount_flag == 1
       @select('feeLabelDiscountInfo').fadeOut().text('')
     else
       @select('feeLabelDiscountInfo').hide().text('how to get 50% market fee discount').fadeIn()
@@ -188,6 +187,7 @@
       .hide().text(gon.i18n.place_order[data.label]).fadeIn()
 
   @clear = (e) ->
+
     if e.currentTarget.checked
       @disableSubmit()
       @refreshBalance(null, null)

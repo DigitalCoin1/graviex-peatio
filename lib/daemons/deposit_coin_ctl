@@ -19,4 +19,3 @@ num.times do |i|
     break
   end
 end
-

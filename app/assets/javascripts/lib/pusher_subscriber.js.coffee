@@ -94,5 +94,3 @@ class DepositAddressHandler extends EventHandler
 
 
 window.PusherSubscriber = PusherSubscriber
-
-

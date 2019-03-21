@@ -45,7 +45,8 @@
             th.text-right BTC
             th.text-right LTC
             th.text-right DOGE
-            th.text-right ETH
+            th.text-right SPERO
+            th.text-right MXT
 
           tbody
             - @turnover.each do |t|
@@ -54,7 +55,8 @@
                  td.text-right = t[:btc]
                  td.text-right = t[:ltc]
                  td.text-right = t[:doge]
-                 td.text-right = t[:eth]
+                 td.text-right = t[:spero]
+                 td.text-right = t[:mxt]
 
   .col-xs-6
     .panel.panel-primary

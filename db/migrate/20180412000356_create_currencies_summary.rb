@@ -11,7 +11,8 @@ class CreateCurrenciesSummary < ActiveRecord::Migration
       t.decimal :btc, :precision => 32, :scale => 16
       t.decimal :ltc, :precision => 32, :scale => 16
       t.decimal :doge, :precision => 32, :scale => 16
-      t.decimal :eth, :precision => 32, :scale => 16
+      t.decimal :spero, :precision => 32, :scale => 16
+      t.decimal :mxt, :precision => 32, :scale => 16
       t.timestamps
     end
   end

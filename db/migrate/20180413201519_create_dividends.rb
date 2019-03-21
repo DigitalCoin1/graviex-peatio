@@ -10,7 +10,7 @@ class CreateDividends < ActiveRecord::Migration
       t.decimal :rate, :precision => 32, :scale => 16
       t.text    :contract
       t.timestamps
-    end    
+    end
     create_table :dividends do |t|
       t.integer :member_id
       t.integer :product_id
@@ -33,6 +33,6 @@ class CreateDividends < ActiveRecord::Migration
     add_index :intraday_dividends, [:dividend_id, :created_at]
     add_index :daily_dividends, [:dividend_id, :created_at]
 
-    Product.create :name => "default", :description => "GIO/BTC/60/24", :asset => 1, :interest => 2, :maturation => 60, :amount => 1000.0, :rate => 0.000000001369
+    Product.create :name => "default", :description => "SPERO/BTC/60/24", :asset => 1, :interest => 2, :maturation => 60, :amount => 1000.0, :rate => 0.000000001369
   end
 end

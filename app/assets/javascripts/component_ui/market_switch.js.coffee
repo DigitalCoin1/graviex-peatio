@@ -79,7 +79,7 @@ window.MarketSwitchUI = flight.component ->
       .attr('title', ticker.last)
       .html("<span class='#{trend}'>#{formatter.ticker_price ticker.last}</span>")
 
-    if @current_unit == 'volume' 
+    if @current_unit == 'volume'
       p1 = parseFloat(ticker.open)
       p2 = parseFloat(ticker.last)
       trend = formatter.trend(p1 <= p2)
@@ -294,7 +294,7 @@ window.MarketSwitchUI = flight.component ->
     @on @select('sortPrice'), 'click', @sortPrice
     @on @select('sortName'), 'click', @sortName
     @on @select('table'), 'click', @switchMarket
-   
+
     @markets_filter = gon.markets_filter
     @current_column = gon.markets_column
     @current_unit = gon.markets_unit

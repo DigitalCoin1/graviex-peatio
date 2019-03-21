@@ -28,14 +28,14 @@ class Dividend < ActiveRecord::Base
   end
 
   def is_allowed
-    if self.updated_at == nil or self.updated_at.to_i - self.created_at.to_i <= 1 
+    if self.updated_at == nil or self.updated_at.to_i - self.created_at.to_i <= 1
       return true
     end
 
     if Time.now.to_i - self.updated_at.to_i < 72 * 60 * 60
       raise "Contract switching will be available in " + (72.0 - (Time.now.to_i - self.updated_at.to_i) / 3600.0).round(2).to_s + " hours"
     end
-    
+
     return true
   end
 
@@ -59,11 +59,11 @@ class Dividend < ActiveRecord::Base
 
     intraday_dividends.each do |hour|
       list.push(hour)
-    
+
       if list.length >= 24
         return list
       end
-    end    
+    end
 
     return list
   end

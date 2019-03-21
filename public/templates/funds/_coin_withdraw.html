@@ -7,7 +7,7 @@
     <div class="col-sm-12" ng-if="fund_sources().length">
 
       <select id="fund_source" class="select required form-control" name="fund_source"
-        ng-model="selected_fund_source_id"
+        ng-model="selected_fund_source"
         ng-model-options="{ getterSetter: true }"
         ng-options="fs.id as fs.label for fs in fund_sources()"
         required>
@@ -36,7 +36,7 @@
         <div class="input-group-btn"><button ng-click="withdrawsCtrl.withdrawAll()" class="btn btn-success" id="withdraw_all_btn" type="button">{{"funds.withdraw_coin.withdraw_all" | t}}</button></div>
       </div>
     </div>
-    <span class="col-sm-6 help-block"><a target="_blank" href="https://www.gravio.net/blog/graviex-fees-bonuses">{{"funds.withdraw_coin.fee_explain" | t}}</a></span>
+    <span class="col-sm-6 help-block"><a target="_blank" href="https://exchange.sperocoin.org">{{"funds.withdraw_coin.fee_explain" | t}}</a></span>
   </div>
 
   <ng-include src="'/templates/funds/_two_factor_auth.html'"></ng-include>
@@ -75,5 +75,4 @@
   </tr>
   <tr ng-if="wdCtrl.noWithdraw()"><td colspan="6"><span class="help-block text-center">{{"funds.withdraw_history.no_data" | t}}</span></td></tr>
 </table>
-
 

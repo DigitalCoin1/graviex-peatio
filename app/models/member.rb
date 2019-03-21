@@ -104,14 +104,14 @@ class Member < ActiveRecord::Base
   end
 
   def member_checked_in_key
-    "graviex:member:#{id}:checked_in"
+    "spero:member:#{id}:checked_in"
   end
 
   def default_product
     if dividend.present?
       return dividend
     end
-    # binding.pry   
+ # binding.pry   
     product = Product.where(name: 'default').first
     if !product.nil?
       self.dividend = Dividend.create(member_id: id, product_id: product.id)
@@ -124,7 +124,7 @@ class Member < ActiveRecord::Base
     #touch product
     default_product
 
-    value = true 
+    value = true
     if two_factors.require_signin?
       value = Rails.cache.read(member_checked_in_key) || false
     end
@@ -139,14 +139,14 @@ class Member < ActiveRecord::Base
     Rails.cache.write(member_checked_in_key, false)
   end
 
-  def has_gio_deposite_50
+  def has_spero_deposite_50
     if dividend != nil and dividend.is_accepted
       return false
     end
 
-    @gio_account = self.accounts.with_currency(:gio).first
-    if @gio_account
-      if @gio_account.balance >= 5000000
+    @spero_account = self.accounts.with_currency(:spero).first
+    if @spero_account
+      if @spero_account.balance >= 5
         return true
       end
     end
@@ -159,6 +159,7 @@ class Member < ActiveRecord::Base
       return true
     end
     #Rails.logger.info "NO fee for " + self.email
+
     return false
   end
 
@@ -281,7 +282,7 @@ class Member < ActiveRecord::Base
       "app_activated" => self.app_two_factor.activated?,
       "sms_activated" => self.sms_two_factor.activated?,
       "memo" => self.id,
-      "has_gio_deposite_50" => self.has_gio_deposite_50,
+      "has_spero_deposite_50" => self.has_spero_deposite_50,
       "state" => self.state,
       "two_fa_require_signin" => self.app_two_factor.require_signin?
     })
@@ -313,4 +314,3 @@ class Member < ActiveRecord::Base
     ::Pusher["private-#{sn}"].trigger_async('members', { type: 'update', id: self.id, attributes: self.changes_attributes_as_json })
   end
 end
-

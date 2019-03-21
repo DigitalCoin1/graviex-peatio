@@ -3,9 +3,9 @@ module Private
     class BaseController < ::Private::BaseController
       layout 'app'
       before_action :channel
-      before_action :auth_activated!
-      # we do not need a fully verified account for that
+      # we do not need a fully verified account here
       # before_action :auth_verified!
+      before_action :auth_verified!
 
       def channel
         @channel ||= DepositChannel.find_by_key(self.controller_name.singularize)

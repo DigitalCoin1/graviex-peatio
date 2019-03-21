@@ -1158,7 +1158,7 @@ var createRequest = function(request) {
     logCurl(request);
   }
 
-  var http = request.scheme == "http" ? HTTP : HTTPS;
+var http = request.scheme == "http" ? HTTP : HTTPS;
 
 
   // Set up the real request using the selected library. The request won't be

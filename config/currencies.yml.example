@@ -16,6 +16,7 @@
   code: btc
   symbol: "฿"
   coin: true
+  family: BTC
   quick_withdraw_max: 0
   rpc: http://username:password@127.0.0.1:18332
   blockchain: https://blockchain.info/tx/#{txid}
@@ -25,17 +26,18 @@
       -
         address: 1HjfnJpQmANtuW7yr1ggeDfyfe1kDK7rm3
 - id: 3
-  key: gravio
-  code: gio
-  proto: GIO
-  symbol: "G"
+  key: ether
+  code: eth
+  symbol: "฿"
   coin: true
+  main_address: YOUR_BASE_ADDRESS
+  family: ETH
+  precision: 4
   quick_withdraw_max: 0
-  rest: http://localhost
-  rpc: http://username:password@127.0.0.1:18332
-  blockchain: https://blockchain.info/tx/#{txid}
-  address_url: https://blockchain.info/address/#{address}
+  rpc: http://Your_eth_server_ip
+  blockchain: https://etherscan.io/tx/#{txid}
+  address_url: https://etherscan.io/address/#{address}
   assets:
     accounts:
       -
-        address: 1HjfnJpQmANtuW7yr1ggeDfyfe1kDK7rm3
+        address: 0x4bA2474e063Aec44e23F2Bf7Fb9e4e2878dBaB44

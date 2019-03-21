@@ -44,16 +44,17 @@ while($running) do
       res = ActiveRecord::Base.connection.execute(sql)      
     end
 
-    for i in 1..7
+     for i in 1..7
       datefrom = date.strftime("%Y-%m-%d 00:00:00")
       dateto = date.strftime("%Y-%m-%d 23:59:59")
 
       btc  = aggregate(2, datefrom, dateto)
-      ltc  = aggregate(51, datefrom, dateto)
+      ltc  = aggregate(4, datefrom, dateto)
       doge = aggregate(3, datefrom, dateto)
-      eth  = aggregate(52, datefrom, dateto)
+      spero = aggregate(5, datefrom, dateto)
+      mxt  = aggregate(6, datefrom, dateto)
 
-      sql = "insert into turnover_summary (btc, ltc, doge, eth, created_at, updated_at, slice) values (#{btc}, #{ltc}, #{doge}, #{eth}, '#{datefrom}', null, #{ts})"
+      sql = "insert into turnover_summary (btc, ltc, doge, spero, mxt, created_at, updated_at, slice) values (#{btc}, #{ltc}, #{doge}, #{spero}, #{mxt}, '#{datefrom}', null, #{ts})"
       res = ActiveRecord::Base.connection.execute(sql)
       date = date.ago(60*60*24)
     end
@@ -65,4 +66,3 @@ while($running) do
 
   sleep 1800
 end
-

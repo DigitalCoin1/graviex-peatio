@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
     gon.markets_column_order = 'asc'
     gon.markets_unit = 'volume'
     gon.markets_pinned = 'true'
-    
+
     if params[:controller] == 'private/markets'
       if params[:markets] != nil 
         gon.markets_filter = params[:markets]
@@ -232,7 +232,7 @@ class ApplicationController < ActionController::Base
           currency: account.currency,
           balance: account.balance,
           locked: account.locked,
-          gio_discount: account.gio_discount
+          spero_discount: account.spero_discount
         } if account.currency_obj.try(:visible)
         memo
       end

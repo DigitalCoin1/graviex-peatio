@@ -5,7 +5,7 @@ module Deposits
     def gen_address
       account = current_user.get_account(channel.currency)
       @address = account.payment_addresses.create currency: account.currency
-      @address.gen_address 
+      @address.gen_address
 
     end
 

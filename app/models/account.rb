@@ -45,7 +45,7 @@ class Account < ActiveRecord::Base
       end
     end
 
-    return self.default_address
+     return self.default_address
   end
 
   def self.after(*names)
@@ -80,9 +80,9 @@ class Account < ActiveRecord::Base
   end
 
   def unlock_and_sub_funds(amount, locked: ZERO, fee: ZERO, reason: nil, ref: nil)
-    #raise AccountError, "cannot unlock and subtract funds (amount: #{amount})" if ((amount <= 0) or (amount > locked))
-    #raise LockedError, "invalid lock amount" unless locked
-    #raise LockedError, "invalid lock amount (amount: #{amount}, locked: #{locked}, self.locked: #{self.locked})" if ((locked <= 0) or (locked > self.locked))
+    raise AccountError, "cannot unlock and subtract funds (amount: #{amount})" if ((amount <= 0) or (amount > locked))
+    raise LockedError, "invalid lock amount" unless locked
+    raise LockedError, "invalid lock amount (amount: #{amount}, locked: #{locked}, self.locked: #{self.locked})" if ((locked <= 0) or (locked > self.locked))
     change_balance_and_locked locked-amount, -locked
   end
 
@@ -157,7 +157,7 @@ class Account < ActiveRecord::Base
     return unless member
 
     json = Jbuilder.encode do |json|
-      json.(self, :balance, :locked, :currency, :is_online, :blocks, :headers, :blocktime, :gio_discount, :coin_home, :coin_btt, :coin_be)
+      json.(self, :balance, :locked, :currency, :is_online, :blocks, :headers, :blocktime, :spero_discount, :coin_home, :coin_btt, :coin_be)
     end
     member.trigger('account', json)
   end
@@ -190,8 +190,8 @@ class Account < ActiveRecord::Base
     currency_obj.blocktime
   end
 
-  def gio_discount
-    member.has_gio_deposite_50
+  def spero_discount
+    member.has_spero_deposite_50
   end
 
   def change_balance_and_locked(delta_b, delta_l)
@@ -219,17 +219,17 @@ class Account < ActiveRecord::Base
       "blocks" => currency_obj.blocks,
       "headers" => currency_obj.headers,
       "blocktime" => currency_obj.blocktime,
-      "gio_discount" => member.has_gio_deposite_50,
-      # "coin_home" => currency_obj.home,
-      # "coin_btt" => currency_obj.btt,
-      # "coin_be" => currency_obj.be
+      "spero_discount" => member.has_spero_deposite_50,
+      "coin_home" => currency_obj.home,
+      "coin_btt" => currency_obj.btt,
+      "coin_be" => currency_obj.be
     })
   end
 
   private
 
   def sync_update
-    ::Pusher["private-#{member.sn}"].trigger_async('accounts', { type: 'update', id: self.id, attributes: {balance: balance, locked: locked, gio_discount: member.has_gio_deposite_50} })
+    ::Pusher["private-#{member.sn}"].trigger_async('accounts', { type: 'update', id: self.id, attributes: {balance: balance, locked: locked, spero_discount: member.has_spero_deposite_50} })
   end
 
 end

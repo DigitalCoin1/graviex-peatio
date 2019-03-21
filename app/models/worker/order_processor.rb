@@ -2,10 +2,10 @@ module Worker
   class OrderProcessor
     def initialize
       @cancel_queue = []
+      create_cancel_thread
       @is_pump = true
       @price = 10.0/1000000000.0;
-      create_cancel_thread
-      #create_test_thread
+      # create_test_thread
     end
 
     def process(payload, metadata, delivery_info)
@@ -90,7 +90,7 @@ module Worker
         source:        'APIv2',
         state:         ::Order::WAIT,
         member_id:     member1,
-        ask:           'gio',
+        ask:           'spero',
         bid:           'btc',
         currency:      4,
         ord_type:      'limit',
@@ -103,7 +103,7 @@ module Worker
         source:        'APIv2',
         state:         ::Order::WAIT,
         member_id:     member2,
-        ask:           'gio',
+        ask:           'spero',
         bid:           'btc',
         currency:      4,
         ord_type:      'limit',

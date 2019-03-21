@@ -519,7 +519,8 @@ ActiveRecord::Schema.define(version: 20180413201524) do
     t.decimal  "btc",        precision: 32, scale: 16
     t.decimal  "ltc",        precision: 32, scale: 16
     t.decimal  "doge",       precision: 32, scale: 16
-    t.decimal  "eth",        precision: 32, scale: 16
+    t.decimal  "spero",      precision: 32, scale: 16
+    t.decimal  "mxt",        precision: 32, scale: 16
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "slice"

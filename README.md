@@ -1,5 +1,8 @@
-GRAVIEX Exchange - cryptocurrency exchange
-==========================================
+# SPEROCOIN EXCHANGER - A Exchange feita pela comunidade!
+=====================================
+
+### Fique por dentro de todas as nossas novidades acessando o nosso [website](https://sperocoin.org) e também nos acompanhando no aplicativo [Trello](https://trello.com/b/jYZvXKDs/sperocoin)!
+
 ### Features
 
 * Designed as high performance crypto currency exchange.
@@ -40,5 +43,10 @@ GRAVIEX Exchange - cryptocurrency exchange
 
 You can interact with Peatio through API:
 
-* [API v2](https://graviex.net/documents/api_v2?lang=en)
-* [Websocket API](https://graviex.net/documents/websocket_api)
+* [API v2](http://demo.peat.io/documents/api_v2?lang=en)
+* [Websocket API](http://demo.peat.io/documents/websocket_api)
+
+
+### License
+
+Peatio is released under the terms of the MIT license. See [http://peatio.mit-license.org](http://peatio.mit-license.org) for more information.

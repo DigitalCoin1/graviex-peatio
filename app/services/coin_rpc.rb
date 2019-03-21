@@ -24,17 +24,12 @@ class CoinRPC
         name = 'OLD_BTC'
       elsif c.proto == 'WOA_BTC'
         name = 'WOA_BTC'
-      elsif c.proto == 'LISK'
-        name = 'LISK'
       elsif c.proto == 'CNT'
         name = 'CNT'
-      elsif c.proto == 'FNT'
-        name = 'FNT'
-      elsif c.proto == 'TOU'
-	     name = 'TOU'
       else
         name = c[:handler]
       end
+
       Rails.logger.info "Making class " + name.to_s + "(" + currency.to_s + ")\n"
       "::CoinRPC::#{name.to_s}".constantize.new(c)
     end
@@ -106,11 +101,10 @@ class CoinRPC
       post_body = { 'method' => name, 'params' => args, 'id' => 'jsonrpc' }.to_json
       Rails.logger.info "OLD_BTC " +  post_body
       resp = JSON.parse( http_post_request(post_body) )
-      Rails.logger.info resp
       raise JSONRPCError, resp['error'] if resp['error']
       result = resp['result']
 
-      result.symbolize_keys! if result.is_a? Hash
+       result.symbolize_keys! if result.is_a? Hash
       result
     end
 
@@ -120,7 +114,6 @@ class CoinRPC
       request.basic_auth @uri.user, @uri.password
       request.content_type = 'application/json'
       request.body = post_body
-      # Rails.logger.info post_body
       @reply = http.request(request).body
       # Rails.logger.info @reply
       return @reply
@@ -207,7 +200,6 @@ class CoinRPC
     end
   end
 
-
   class ETH < self
     def handle(name, *args)
       post_body = {"jsonrpc" => "2.0", 'method' => name, 'params' => args, 'id' => '1' }.to_json
@@ -216,9 +208,6 @@ class CoinRPC
       Rails.logger.info resp
       raise JSONRPCError, resp['error'] if resp['error']
       result = resp['result']
-      if result == nil 
-        return result
-      end
       result.symbolize_keys! if result.is_a? Hash
       result
     end
@@ -241,6 +230,7 @@ class CoinRPC
         (open("#{@rest}/cgi-bin/total.cgi").read.rstrip.to_f)
       rescue => ex
         Rails.logger.info  "[error]: " + ex.message + "\n" + ex.backtrace.join("\n") + "\n"
+      rescue
         'N/A'
       end
     end
@@ -258,55 +248,6 @@ class CoinRPC
     end
   end
 
-  class TOU < self
-    def handle(name, *args)
-      post_body = {"jsonrpc" => "2.0", 'method' => name, 'params' => args, 'id' => '1' }.to_json
-      Rails.logger.info "TOU " +  post_body
-      resp = JSON.parse( http_post_request(post_body) )
-      Rails.logger.info resp
-      raise JSONRPCError, resp['error'] if resp['error']
-      result = resp['result']
-      if result == nil 
-        return result
-      end
-      result.symbolize_keys! if result.is_a? Hash
-      result
-    end
-    def http_post_request(post_body)
-      http    = Net::HTTP.new(@uri.host, @uri.port)
-      request = Net::HTTP::Post.new(@uri.request_uri)
-      request.basic_auth @uri.user, @uri.password
-      request.content_type = 'application/json'
-      request.body = post_body
-      @reply = http.request(request).body
-      # Rails.logger.info @reply
-      return @reply
-    rescue Errno::ECONNREFUSED => e
-      raise ConnectionRefusedError
-    end
-
-    def safe_getbalance
-      begin
-        #Rails.logger.info @rest + " -> " + "#{@rest}/cgi-bin/total.cgi"
-        (open("#{@rest}/cgi-bin/total.cgi").read.rstrip.to_f)
-      rescue => ex
-        Rails.logger.info  "[error]: " + ex.message + "\n" + ex.backtrace.join("\n") + "\n"
-        'N/A'
-      end
-    end
-
-    def getblockchaininfo
-      @lastBlock = eth_getBlockByNumber("latest", true)
-      #Rails.logger.info @lastBlock
-      #Rails.logger.info "number = " + Integer(@lastBlock[:number]).to_s + ", timestamp = " + Integer(@lastBlock[:timestamp]).to_s
-
-      {
-        blocks: Integer(@lastBlock[:number]),
-        headers: 0,
-        mediantime: Integer(@lastBlock[:timestamp])
-      }
-    end
-  end
   class LISK < self
     def handle(name, *args)
       post_body = {"jsonrpc" => "2.0", 'method' => name, 'params' => args, 'id' => '1' }.to_json
@@ -407,7 +348,7 @@ class CoinRPC
         ]
       }
     end
-  
+
     def settxfee
     end
 
@@ -418,7 +359,6 @@ class CoinRPC
         amount: Integer(amount * 100000000.0),
         recipientId: address
       }.to_json
-
       result = http_put_request_body("#{@rest}/api/transactions", parameters)
       return result['transactionId']
     end
@@ -585,152 +525,4 @@ class CoinRPC
     end
   end
 
-  class FNT < self
-    def handle(name, *args)
-      post_body = {"jsonrpc" => "2.0", 'method' => name, 'params' => args, 'id' => '1' }.to_json
-      resp = JSON.parse( http_post_request(post_body) )
-      puts "FNT <- " + resp.to_json
-      raise JSONRPCError, resp['error'] if resp['error']
-      result = resp['result']
-      #result.symbolize_keys! if result.is_a? Hash
-      result
-    end
-
-    def handle_one(name, arg)
-      post_body = {"jsonrpc" => "2.0", 'method' => name, 'params' => arg, 'id' => '1' }.to_json
-      resp = JSON.parse( http_post_request(post_body) )
-      raise JSONRPCError, resp['error'] if resp['error']
-      result = resp['result']
-      #result.symbolize_keys! if result.is_a? Hash
-      result
-    end
-
-    def handle_only(name, arg)
-      post_body = {"jsonrpc" => "2.0", 'method' => name, 'id' => '1' }.to_json
-      resp = JSON.parse( http_post_request(post_body) )
-      raise JSONRPCError, resp['error'] if resp['error']
-      result = resp['result']
-      #result.symbolize_keys! if result.is_a? Hash
-      result
-    end
-
-    def http_post_request(post_body)
-      http    = Net::HTTP.new(@uri.host, @uri.port)
-      request = Net::HTTP::Post.new(@uri.request_uri)
-      request.content_type = 'application/json'
-      #request.basic_auth uri.user, uri.password
-      request.body = post_body
-      puts post_body
-      @reply = http.request(request).body
-      puts @reply
-      return @reply
-    rescue Errno::ECONNREFUSED => e
-      raise ConnectionRefusedError
-    end
-
-    def safe_getbalance
-      begin
-        getbalance
-      rescue => ex
-        puts  "[error]: " + ex.message + "\n" + ex.backtrace.join("\n") + "\n"
-        'N/A'
-      end
-    end
-
-    def getbalance
-      result = handle_only("getBalance", "")
-      balance = result['availableBalance'].to_f / 1000000000000.0
-      return balance
-    end
-
-    def gettransaction(txid)
-      parameters =
-      {
-        transactionHash: txid
-      }
-      transaction = handle_one("getTransaction", parameters)
-      confirmations = Integer(transaction['transaction']['blockIndex'])
-      if confirmations > 0
-        result = handle_only("getStatus", "")
-        confirmations = Integer(result['blockCount']) - confirmations
-      end
-      result =  {
-          confirmations: confirmations,
-          time: Time.now.to_i,
-          details:[]
-        }
-      if transaction['transaction']['transfers'] == nil
-        return result
-      end
-      transaction['transaction']['transfers'].each do |destination|
-        tx = {
-            address: destination['address'],
-            amount: destination['amount'].to_f / 1000000000000.0,
-            category: "receive"
-          }
-        result[:details].push(tx)
-      end
-      return result
-    end
-
-    def settxfee
-    end
-
-    def sendtoaddress(from, address, amount)
-      parameters =
-      {
-        anonymity: 0,
-        fee: 1000000,
-        unlockTime: 0,
-        transfers:
-        [
-          {
-            amount: Integer(amount * 1000000000000.0),
-            address: address
-          }
-        ],
-        changeAddress: "BHuoqU2fRnQ6Cjot9nXbvDKw6y3vpjYA8dTQR9tKMVvxbYDm1w895eGRrKZrrc9q7x5kfiJTBTn8zEx7CWxDVLPMBzKGDYf"
-      }
-
-      result = handle_one("sendTransaction", parameters)
-      return result['transactionHash']
-    end
-
-    def getnewaddress(base_account, digest)
-      parameters =
-      {
-      }.to_json
-
-      result = handle_only("createAddress", "")
-      return result['address']
-    end
-
-    def getnewaddress(base_account, digest)
-      parameters =
-      {
-      }.to_json
-
-      result = handle_only("createAddress", "")
-      return result['address']
-    end
-
-    def getfee(size)
-      return (30000000.0/1000000000.0).to_f
-    end
-
-    def validateaddress(address)
-    end
-
-    def getblockchaininfo
-
-      result = handle_only("getStatus", "")
-
-      {
-        blocks: Integer(result['blockCount']),
-        headers: 0,
-        mediantime: 0
-      }
-    end
-  end
 end
-

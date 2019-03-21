@@ -1,3 +1,4 @@
+
 module Admin
   module Deposits
     class EthersController < ::Admin::Deposits::BaseController

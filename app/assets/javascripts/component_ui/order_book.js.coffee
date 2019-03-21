@@ -110,7 +110,7 @@
           volume = volume.minus(diff)
           subtotal = memo.plus(BigNumber(num[0]).minus(diff).times(BigNumber(num[1])))
           done = true
-      
+
 #        console.log "Return = " + (subtotal).toF(9)
         return subtotal
 

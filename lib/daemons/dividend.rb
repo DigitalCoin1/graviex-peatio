@@ -44,22 +44,22 @@ while($running) do
       #$stdout.print "hour dividend rate " + dividend_rate.to_s + " volume " + volume.to_s + "\n"
       $stdout.print "hour blocks count " + blocks_count.to_s + " dividend rate " + dividend_rate.to_s + " volume " + volume.to_s + "\n"
       product.dividends.each do |dividend|
-         $stdout.print "hour process dividend for member " + dividend[:member_id].to_s + "\n"
-         #member = Member.find_by_id dividend[:member_id]
-         #gio_account = member.accounts.with_currency(:gio).first
-         account = dividend.asset
-         if account
-           #$stdout.print "test " + product.amount.to_s + "\n"
-           hourly_dividend = (account.balance/product.amount).to_i * dividend_rate
-           $stdout.print "hour result " + hourly_dividend.to_s + "\n"
-           prev_div = nil
-           if dividend.intraday_dividends.first
-             prev_div = dividend.intraday_dividends.first.current
-           end
-           IntradayDividend.create(:dividend_id => dividend.id, :current => account.balance, :previous => volume, :profit => hourly_dividend);
+        $stdout.print "hour process dividend for member " + dividend[:member_id].to_s + "\n"
+        #member = Member.find_by_id dividend[:member_id]
+        #spero_account = member.accounts.with_currency(:spero).first
+        account = dividend.asset
+        if account
+          #$stdout.print "test " + product.amount.to_s + "\n"
+          hourly_dividend = (account.balance/product.amount).to_i * dividend_rate
+          $stdout.print "hour result " + hourly_dividend.to_s + "\n"
+          prev_div = nil
+          if dividend.intraday_dividends.first
+            prev_div = dividend.intraday_dividends.first.current
+          end
+          IntradayDividend.create(:dividend_id => dividend.id, :current => account.balance, :previous => volume, :profit => hourly_dividend);
          end
 
-         #$stdout.print member[:email] + "\n"
+          #$stdout.print member[:email] + "\n"
       end
     end
   end

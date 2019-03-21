@@ -21,21 +21,21 @@ module Admin
         slice = res['result'].to_i
       end
 
-      sql = "select created_at, btc, ltc, doge, eth from turnover_summary where slice = #{slice}"
+      sql = "select created_at, btc, ltc, doge, spero, mxt from turnover_summary where slice = #{slice}"
       res = ActiveRecord::Base.connection.exec_query(sql)
 
       @turnover = []
       res.each do |day| 
-        @turnover.push ( {:date => day['created_at'].strftime("%Y-%m-%d"), :btc => day['btc'], :ltc => day['ltc'], :doge => day['doge'], :eth => day['eth']} )
+        @turnover.push ( {:date => day['created_at'].strftime("%Y-%m-%d"), :btc => day['btc'], :ltc => day['ltc'], :doge => day['doge'], :spero => day['spero'], :mxt => day['mxt']} )
       end
     end
 
-    def collect_currencies_summary
+     def collect_currencies_summary
       sql = "select max(slice) as result from currencies_summary group by slice order by slice desc limit 1"
       res = ActiveRecord::Base.connection.exec_query(sql).first
       slice = DateTime.now.to_i
-      
-      if res != nil
+
+       if res != nil
         slice = res['result'].to_i
       end
 
@@ -54,13 +54,13 @@ module Admin
       # @currencies_summary = []
       # collect_currencies_summary
       @currencies_summary = Currency.all.map(&:summary)
+
       @register_count = Member.count
 
       @turnover = []
       collect_turnover_summary
 
       @sessions = []
-
       date = DateTime.now
       for i in 1..7
         datefrom = date.strftime("%Y-%m-%d 00:00:00")

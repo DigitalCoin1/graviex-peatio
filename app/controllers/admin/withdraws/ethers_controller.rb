@@ -1,6 +1,6 @@
 module Admin
   module Withdraws
-    class  EthersController < ::Admin::Withdraws::BaseController
+    class EthersController < ::Admin::Withdraws::BaseController
       load_and_authorize_resource :class => '::Withdraws::Ether'
 
       def index

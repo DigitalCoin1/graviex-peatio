@@ -28,7 +28,7 @@ Peatio::Application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Generate digests for assets URLs.
   config.assets.digest = true
@@ -40,11 +40,8 @@ Peatio::Application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
-  #
-  # TODO: ENABLE IN PRODUCTION
-  #
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = false
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
@@ -62,10 +59,11 @@ Peatio::Application.configure do
   config.session_store :redis_store, :key => '_peatio_session', :expire_after => ENV['SESSION_EXPIRE'].to_i.minutes
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = "http://assets.example.com"
+  # config.action_controller.asset_host = "http://localhost:8005/"
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
+  config.assets.precompile = ['.js', '.css', '*.css.erb','*.png']   
   config.assets.precompile += %w( dividends.js funds.js market.js market.css admin.js admin.css html5.js api_v2.css api_v2.js .svg .eot .woff .ttf )
 
   # Ignore bad email addresses and do not raise email delivery errors.

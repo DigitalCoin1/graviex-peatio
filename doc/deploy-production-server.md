@@ -1,17 +1,17 @@
-Deploy production server on Ubuntu 14.04 / 16
----------------------------------------------
+Deploy production server on Ubuntu 16.04
+-------------------------------------
 
 ### Overview
 
-1. Setup deploy user
-2. Install [Ruby](https://www.ruby-lang.org/en/)
-3. Install [MySQL](http://www.mysql.com/)
-4. Install [Redis](http://redis.io/)
-5. Install [RabbitMQ](https://www.rabbitmq.com/)
-6. Install [Bitcoind](https://en.bitcoin.it/wiki/Bitcoind)
-7. Install [Nginx with Passenger](https://www.phusionpassenger.com/)
-8. Install JavaScript Runtime
-9. Install ImageMagick
+ 1. Setup deploy user
+ 2. Install [Ruby](https://www.ruby-lang.org/en/)
+ 3. Install [MySQL](http://www.mysql.com/)
+ 4. Install [Redis](http://redis.io/)
+ 5. Install [RabbitMQ](https://www.rabbitmq.com/)
+ 6. Install [Bitcoind](https://en.bitcoin.it/wiki/Bitcoind)
+ 7. Install [Nginx with Passenger](https://www.phusionpassenger.com/)
+ 8. Install JavaScript Runtime
+ 9. Install ImageMagick
 10. Configure Peatio
 
 ### 1. Setup deploy user
@@ -49,8 +49,8 @@ Installing [rbenv](https://github.com/sstephenson/rbenv) using a Installer
 
 Install Ruby through rbenv:
 
-    rbenv install 2.2.1
-    rbenv global 2.2.1
+    rbenv install --verbose 2.2.2
+    rbenv global 2.2.2
 
 Install bundler
 
@@ -64,32 +64,22 @@ Install bundler
 
 ### 4. Install Redis
 
-Be sure to install the latest stable Redis, as the package in the distro may be a bit old:
-
-    sudo apt-add-repository -y ppa:rwky/redis
-    sudo apt-get update
-    sudo apt-get install redis-server
+    sudo apt install -y redis-server
 
 ### 5. Install RabbitMQ
 
 Please follow instructions here: https://www.rabbitmq.com/install-debian.html
 
-     echo 'deb http://www.rabbitmq.com/debian/ testing main' |
-        sudo tee /etc/apt/sources.list.d/rabbitmq.list
-        wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc |
-        sudo apt-key add -
-        sudo apt-get update
-        sudo apt-get install rabbitmq-server
+    echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
+    wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install rabbitmq-server
 
     sudo rabbitmq-plugins enable rabbitmq_management
     sudo service rabbitmq-server restart
     wget http://localhost:15672/cli/rabbitmqadmin
     chmod +x rabbitmqadmin
     sudo mv rabbitmqadmin /usr/local/sbin
-    
-    rabbitmqctl add_user deploy *****
-    rabbitmqctl set_user_tags deploy administrator
-    rabbitmqctl set_permissions -p / deploy ".*" ".*" ".*"
 
 ### 6. Install Bitcoind
 
@@ -129,39 +119,25 @@ Insert the following lines into the bitcoin.conf, and replce with your username 
 
 Install Phusion's PGP key to verify packages
 
-    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 
 Add HTTPS support to APT
 
     sudo apt-get install apt-transport-https ca-certificates
 
-Add the passenger repository. Note that this only works for Ubuntu 14.04. For other versions of Ubuntu, you have to add the appropriate repository according to Section 2.3.1 of this [link](https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html).
+Add the passenger repository. Note that this only works for Ubuntu 16.04. For other versions of Ubuntu, you have to add the appropriate
+repository according to Section 2.3.1 of this [link](https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html).
 
-    sudo add-apt-repository 'deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main'
+    sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main > /etc/apt/sources.list.d/passenger.list'
     sudo apt-get update
 
 Install nginx and passenger
 
     sudo apt-get install nginx-extras passenger
 
-#### Note: If you are on Ubuntu 16.04 do the following
-Install our PGP key and add HTTPS support for APT
-    
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
-    sudo apt-get install -y apt-transport-https ca-certificates
-
-Add our APT repository
-
-    sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main > /etc/apt/sources.list.d/passenger.list'
-    sudo apt-get update
-
-Install Passenger + Nginx
-
-    sudo apt-get install -y nginx-extras passenger    
-
 Next, we need to update the Nginx configuration to point Passenger to the version of Ruby that we're using. You'll want to open up /etc/nginx/nginx.conf in your favorite editor,
 
-    sudo vim /etc/nginx/nginx.conf
+    sudo vim /etc/nginx/passenger.conf
 
 find the following lines, and uncomment them:
 
@@ -172,11 +148,19 @@ update the second line to read:
 
     passenger_ruby /home/deploy/.rbenv/shims/ruby;
 
+we will alsp need to enable passenger in nginx config file
+
+    sudo vim /etc/nginx/nginx.conf
+
+and uncomment
+
+    include  /etc/nginx/passenger.conf;
+
 ### 8. Install JavaScript Runtime
 
 A JavaScript Runtime is needed for Asset Pipeline to work. Any runtime will do but Node.js is recommended.
 
-    curl -sL https://deb.nodesource.com/setup | sudo bash -
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
     sudo apt-get install nodejs
 
 
@@ -189,14 +173,17 @@ A JavaScript Runtime is needed for Asset Pipeline to work. Any runtime will do b
 
     echo "export RAILS_ENV=production" >> ~/.bashrc
     source ~/.bashrc
+
 ### 11. Install Ghostscrip
 
     sudo apt-get install ghostscript
+
 ##### Clone the Source
 
     mkdir -p ~/peatio
-    git clone https://github.com/pankaj9310/graviex-peatio.git ~/peatio/current
-    cd peatio/current
+    cd peatio
+    git clone https://github.com/DigitalCoin1/Spero-Exchange.git
+
 
     ＃ Install dependency gems
     bundle install --without development test --path vendor/bundle
@@ -229,13 +216,6 @@ More details to visit [pusher official website](http://pusher.com)
 
     # Initialize the database and load the seed data
     bundle exec rake db:setup
-    
-**If error occured - try to fix client.rb**
-
-    change 
-        :connect_flags => REMEMBER_OPTIONS | LONG_PASSWORD | LONG_FLAG | TRANSACTIONS | PROTOCOL_41 | SECURE_CONNECTION,
-    to
-        :connect_flags => REMEMBER_OPTIONS | LONG_PASSWORD | LONG_FLAG | TRANSACTIONS | PROTOCOL_41,
 
 **Precompile assets**
 
@@ -269,11 +249,10 @@ For security reason, you must setup SSL Certificate for production environment, 
 **Passenger:**
 
     sudo rm /etc/nginx/sites-enabled/default
-    sudo ln -s /home/deploy/peatio/current/config/nginx.conf /etc/nginx/conf.d/peatio.conf
+    sudo ln -s /home/deploy/peatio/config/nginx.conf /etc/nginx/conf.d/peatio.conf
     sudo service nginx restart
 
 **Liability Proof**
 
     # Add this rake task to your crontab so it runs regularly
     RAILS_ENV=production rake solvency:liability_proof
-

@@ -11,7 +11,7 @@ app.directive 'dividends', ->
 
       ctrl = @
       @state = $state
-     
+
       $scope.product = Product.all()[0]
       $scope.dividend = Dividend.all()[0]
       $scope.asset = Asset.all()[0]

@@ -17,7 +17,7 @@ module Private
     end
 
     def check_two_fa_signinin_in
-     
+
       if current_user && !current_user.checked_in?
         session[:return_to] = request.original_url
         redirect_to two_factors_path        
