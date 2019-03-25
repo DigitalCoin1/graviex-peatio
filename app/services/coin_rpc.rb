@@ -29,7 +29,6 @@ class CoinRPC
       else
         name = c[:handler]
       end
-
       Rails.logger.info "Making class " + name.to_s + "(" + currency.to_s + ")\n"
       "::CoinRPC::#{name.to_s}".constantize.new(c)
     end
@@ -101,10 +100,11 @@ class CoinRPC
       post_body = { 'method' => name, 'params' => args, 'id' => 'jsonrpc' }.to_json
       Rails.logger.info "OLD_BTC " +  post_body
       resp = JSON.parse( http_post_request(post_body) )
+      Rails.logger.info resp
       raise JSONRPCError, resp['error'] if resp['error']
       result = resp['result']
 
-       result.symbolize_keys! if result.is_a? Hash
+      result.symbolize_keys! if result.is_a? Hash
       result
     end
 
@@ -114,6 +114,7 @@ class CoinRPC
       request.basic_auth @uri.user, @uri.password
       request.content_type = 'application/json'
       request.body = post_body
+      # Rails.logger.info post_body
       @reply = http.request(request).body
       # Rails.logger.info @reply
       return @reply

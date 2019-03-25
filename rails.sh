@@ -1,3 +1,4 @@
+echo "Starting Server.."
 fuser -k 3000/tcp
 kill -9 `cat tmp/pids/server.pid`
 echo ""
@@ -22,3 +23,4 @@ echo ""
 echo "" 
 sudo service nginx restart
 bundle exec rails s -p 3000
+echo "Server Started ..."
